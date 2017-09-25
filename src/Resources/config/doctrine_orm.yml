@@ -1,0 +1,8 @@
+services:
+    # EventSubscriber
+    file_storage.event_subscriber.orm_entity:
+        lazy: false
+        class: 'PhpSolution\FileStorageBundle\EventSubscriber\ORMEntitySubscriber'
+        arguments: ["@file_storage.lib.processor"]
+        tags:
+            - { name: 'doctrine.event_subscriber' }

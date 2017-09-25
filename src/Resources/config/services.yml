@@ -1,0 +1,43 @@
+services:
+    # EventSubscriber
+    file_storage.event_subscriber.basic:
+        lazy: false
+        class: 'PhpSolution\FileStorageBundle\EventSubscriber\BasicSubscriber'
+        arguments:  ["@file_storage.lib.storage_provider"]
+        tags:
+            - { name: 'file_storage.event_subscriber', priority: -1 }
+
+    file_storage.event_subscriber.uploaded_file_info:
+        lazy: false
+        class: 'PhpSolution\FileStorageBundle\EventSubscriber\UploadedFileInfoSubscriber'
+        tags:
+            - { name: 'file_storage.event_subscriber', priority: -1 }
+
+    # Lib
+    file_storage.lib.file_manager:
+        class: 'PhpSolution\FileStorageBundle\Lib\FileManager'
+        arguments:  ["@file_storage.lib.storage_provider"]
+
+    file_storage.lib.file_provider:
+        class: 'PhpSolution\FileStorageBundle\Lib\FileProvider'
+        arguments:  ["%file_storage.file_system.webpath%"]
+
+    file_storage.lib.mime_type_analyzer:
+        public: false
+        class: 'PhpSolution\FileStorageBundle\Lib\MimeTypeAnalyser'
+
+    file_storage.lib.processor:
+        lazy: false
+        class: 'PhpSolution\FileStorageBundle\Lib\Processor'
+        arguments: ["@event_dispatcher"]
+
+    file_storage.lib.storage_provider:
+        lazy: false
+        class: 'PhpSolution\FileStorageBundle\Lib\StorageProvider'
+
+    ## Storage
+    file_storage.lib.storage.file_system:
+        class: 'PhpSolution\FileStorageBundle\Lib\Storage\FileSystem'
+        arguments:  ["%file_storage.file_system.path%"]
+        tags:
+            - { name: 'file_storage.storage' }
