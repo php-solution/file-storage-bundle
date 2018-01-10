@@ -38,6 +38,13 @@ services:
     ## Storage
     file_storage.lib.storage.file_system:
         class: 'PhpSolution\FileStorageBundle\Lib\Storage\FileSystem'
-        arguments:  ["%file_storage.file_system.path%"]
+        arguments: ["%file_storage.file_system.path%"]
         tags:
             - { name: 'file_storage.storage' }
+
+    # Twig
+    file_storage.twig.web_path:
+        class: 'PhpSolution\FileStorageBundle\Twig\WebPathExtension'
+        arguments: ["@file_storage.lib.file_provider"]
+        tags:
+            - { name: 'twig.extension' }
