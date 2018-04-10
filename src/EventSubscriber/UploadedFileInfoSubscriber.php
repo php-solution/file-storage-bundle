@@ -29,7 +29,7 @@ class UploadedFileInfoSubscriber implements EventSubscriberInterface
         $storageInfo = $event->getStorageInfo();
         $file = $storageInfo->getFile();
 
-        $storageInfo->setName($file->getClientOriginalName());
+        $storageInfo->setName(md5($file->getClientOriginalName() . microtime(true)));
         $storageInfo->setMimeType($file->getMimeType());
         $storageInfo->setSize($file->getSize());
         $storageInfo->setExtension($file->getClientOriginalExtension());

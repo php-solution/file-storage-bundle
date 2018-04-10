@@ -49,6 +49,6 @@ trait StorageInfoTrait
      */
     public function getStoragePath(): string
     {
-        return $this->getId() . '.' . $this->getExtension();
+        return $this->getName() . '.' . $this->getExtension();
     }
 }
