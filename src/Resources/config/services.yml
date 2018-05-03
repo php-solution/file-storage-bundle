@@ -10,6 +10,8 @@ services:
     file_storage.event_subscriber.uploaded_file_info:
         lazy: false
         class: 'PhpSolution\FileStorageBundle\EventSubscriber\UploadedFileInfoSubscriber'
+        arguments:
+            - '@file_storage.lib.storage.file_system'
         tags:
             - { name: 'file_storage.event_subscriber', priority: -1 }
 

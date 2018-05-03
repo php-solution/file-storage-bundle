@@ -4,6 +4,7 @@ namespace PhpSolution\FileStorageBundle\EventSubscriber;
 
 use PhpSolution\FileStorageBundle\Event\FileEvents;
 use PhpSolution\FileStorageBundle\Event\UploadFileEvent;
+use PhpSolution\FileStorageBundle\Lib\Storage\FileSystem;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -11,6 +12,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class UploadedFileInfoSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var FileSystem
+     */
+    protected $fileSystem;
+
+    public function __construct(FileSystem $fileSystem)
+    {
+        $this->fileSystem = $fileSystem;
+    }
+
     /**
      * @return array
      */
@@ -28,6 +39,11 @@ class UploadedFileInfoSubscriber implements EventSubscriberInterface
     {
         $storageInfo = $event->getStorageInfo();
         $file = $storageInfo->getFile();
+
+        // remove old file on update
+        if ($storageInfo->getName()) {
+            $this->fileSystem->remove($storageInfo);
+        }
 
         $storageInfo->setName(md5($file->getClientOriginalName() . microtime(true)));
         $storageInfo->setMimeType($file->getMimeType());
